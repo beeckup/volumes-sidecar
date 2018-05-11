@@ -1,0 +1,54 @@
+version: '2'
+services:
+  sidecar-backup-volumes:
+      image: nutellinoit/sidecar-backup-volumes:1.1
+      volumes:
+          - ./dumpdata:/go/src/app/dumpdata # Local temp repository
+      restart: always
+      environment:
+        - FOLDERS=${FOLDERS}
+        - SCHEDULE=${SCHEDULE}
+        - S3_UPLOAD=${S3_UPLOAD}
+        - S3_BUCKET=${S3_BUCKET}
+        - S3_KEY=${S3_KEY}
+        - S3_SECRET=${S3_SECRET}
+        - S3_HOST=${S3_HOST}
+        - S3_PROTOCOL=${S3_PROTOCOL}
+      volumes_from:
+        - wordpress:ro  # example mounted volumes for backups
+###################
+##### example wordpress install to backup
+  wordpress:
+      image: wordpress
+      restart: always
+      ports:
+        - "80:80"
+      volumes:
+        - ./wp-app:/var/www/html
+###################
+##### example minio install
+  minio:
+    image: minio/minio
+    ports:
+       - "${MINIO_PORT}:9000"
+    volumes:
+      - ./minio_storage:/data
+    environment:
+      - MINIO_ACCESS_KEY=${S3_KEY}
+      - MINIO_SECRET_KEY=${S3_SECRET}
+    command: minio server /data
+####################
+##### example container to create a new bucket if doesn't exist
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 20;
+      /usr/bin/mc config host add custom_instance ${S3_PROTOCOL}://${S3_HOST} ${S3_KEY} ${S3_SECRET};
+      /usr/bin/mc rm -r --force custom_instance/${S3_BUCKET};
+      /usr/bin/mc mb custom_instance/${S3_BUCKET};
+       /usr/bin/mc policy download custom_instance/${S3_BUCKET};
+      exit 0;
+      "
