@@ -68,7 +68,7 @@ Create `docker-compose.yml` file:
 ```yml
 version: '2'
 services:
-  sidecar-backup-mysql:
+  sidecar-backup-volumes:
       image: nutellinoit/sidecar-backup-volumes:1.1
       volumes:
           - ./dumpdata:/go/src/app/dumpdata # Local temp repository
