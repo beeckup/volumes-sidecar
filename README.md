@@ -82,7 +82,6 @@ services:
         - S3_SECRET=${S3_SECRET}
         - S3_HOST=${S3_HOST}
         - S3_PROTOCOL=${S3_PROTOCOL}
-        - ZIP_FILE=${ZIP_FILE}
       volumes_from:
         - wordpress:ro  # example mounted volumes for backups
 ###################
