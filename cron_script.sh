@@ -10,8 +10,6 @@ _file_for_start="dumpdata/$_name"
 
 echo "Dumping all folders "
 
-_tarname=$(echo $FOLDERS | sed -e 's/\//_/g')
-
 IFS=',' read -r -a array <<< "$FOLDERS";
 
 
@@ -19,7 +17,7 @@ for folder in "${array[@]}"
 do
 
   echo "Dumping $folder folder..."
-
+  _tarname=$(echo $folder | sed -e 's/\//_/g')
   tar -cvzf "$_file_for_start$_tarname"_bck_`date +%Y%m%d`.tar.gz $folder;
 
   _file="$_file_for_start$_tarname"_bck_`date +%Y%m%d`.tar.gz
