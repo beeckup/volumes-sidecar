@@ -101,3 +101,7 @@ Launch with
 ```bash
 docker-compose up -d
 ```
+
+## Restoring files
+
+See my other projects https://github.com/nutellinoit/sidecar-restore-volumes
