@@ -52,3 +52,4 @@ fabric.properties
 /deploy_sidecar_example/dumpdata/
 /deploy_sidecar_example/wp-app/
 
+/build_container/cleaner.sh
