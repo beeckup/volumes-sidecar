@@ -1,5 +1,7 @@
 # Sidecar Backup Volumes
 
+## Automatic Volumes Backup on S3
+
 Example deploy on  ```deploy_sidecar_example/docker-compose.yml```
 
 Copy `env.sample` as `.env`
@@ -8,8 +10,9 @@ Automatically create tar.gz of `FOLDERS` based on `SCHEDULE`
 
 ENVIROMENT VARIABLE   | DESCRIPTION | Values
 ----------   | ---------- | --------------  
-FOLDERS | folders comma separated | example `/var/www,/var/etc`
+FOLDERS | folders comma delimited | example `/var/www,/var/etc`
 SCHEDULE | see below | 
+CLEAN_DAYS | number of backup retention days | integer or empty
 
 ## Schedule
 
@@ -61,6 +64,8 @@ S3_SECRET=14MAuAetrv7y3E6zAuUOimXy5KYRqrZKw3cWuEe/
 ### port of local minio
 MINIO_PORT=9000
 
+### Number of days to maintain backup history
+CLEAN_DAYS=15
 ```
 
 Create `docker-compose.yml` file:
@@ -69,7 +74,7 @@ Create `docker-compose.yml` file:
 version: '2'
 services:
   sidecar-backup-volumes:
-      image: nutellinoit/sidecar-backup-volumes:latest
+      image: beeckup/sidecar-backup-volumes:latest
       volumes:
           - ./dumpdata:/go/src/app/dumpdata # Local temp repository
       restart: always
@@ -82,6 +87,7 @@ services:
         - S3_SECRET=${S3_SECRET}
         - S3_HOST=${S3_HOST}
         - S3_PROTOCOL=${S3_PROTOCOL}
+	    - CLEAN_DAYS=${CLEAN_DAYS}
       volumes_from:
         - wordpress:ro  # example mounted volumes for backups
 ###################
@@ -104,4 +110,4 @@ docker-compose up -d
 
 ## Restoring files
 
-See my other projects https://github.com/nutellinoit/sidecar-restore-volumes
+See my other projects https://github.com/beeckup/sidecar-restore-volumes
