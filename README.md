@@ -74,31 +74,31 @@ Create `docker-compose.yml` file:
 version: '2'
 services:
   sidecar-backup-volumes:
-      image: beeckup/sidecar-backup-volumes:latest
-      volumes:
-          - ./dumpdata:/go/src/app/dumpdata # Local temp repository
-      restart: always
-      environment:
-        - FOLDERS=${FOLDERS}
-        - SCHEDULE=${SCHEDULE}
-        - S3_UPLOAD=${S3_UPLOAD}
-        - S3_BUCKET=${S3_BUCKET}
-        - S3_KEY=${S3_KEY}
-        - S3_SECRET=${S3_SECRET}
-        - S3_HOST=${S3_HOST}
-        - S3_PROTOCOL=${S3_PROTOCOL}
-	    - CLEAN_DAYS=${CLEAN_DAYS}
-      volumes_from:
-        - wordpress:ro  # example mounted volumes for backups
+    image: beeckup/sidecar-backup-volumes:latest
+    volumes:
+      - ./dumpdata:/go/src/app/dumpdata # Local temp repository
+    restart: always
+    environment:
+      - FOLDERS=${FOLDERS}
+      - SCHEDULE=${SCHEDULE}
+      - S3_UPLOAD=${S3_UPLOAD}
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_KEY=${S3_KEY}
+      - S3_SECRET=${S3_SECRET}
+      - S3_HOST=${S3_HOST}
+      - S3_PROTOCOL=${S3_PROTOCOL}
+      - CLEAN_DAYS=${CLEAN_DAYS}
+    volumes_from:
+      - wordpress:ro  # example mounted volumes for backups
 ###################
 ##### example wordpress install to backup
   wordpress:
-      image: wordpress
-      restart: always
-      ports:
-        - "80:80"
-      volumes:
-        - ./wp-app:/var/www/html
+    image: wordpress
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./wp-app:/var/www/html
 
 ```
 
