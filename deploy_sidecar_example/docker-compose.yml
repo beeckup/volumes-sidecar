@@ -1,7 +1,7 @@
 version: '2'
 services:
   sidecar-backup-volumes:
-      image: beeckup/sidecar-backup-volumes:dev
+      image: beeckup/sidecar-backup-volumes:latest
       volumes:
           - ./dumpdata:/go/src/app/dumpdata # Local temp repository
       restart: always
